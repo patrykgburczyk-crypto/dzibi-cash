@@ -9,8 +9,18 @@ const demo=[
 ];
 function fmt(n){return Number(n).toFixed(2).replace(".",",")}
 function calc(m){
- const imp=m.odds.map(x=>x?1/x:0),sum=imp.reduce((a,b)=>a+b,0);
- return m.p.map((p,i)=>({p,implied:sum?imp[i]/sum:0,edge:p-(sum?imp[i]/sum:0),ev:p*m.odds[i]-1,odd:m.odds[i]}));
+  const odds=m.odds||[], probs=m.p||[];
+  const valid=odds.length===3 && probs.length===3 &&
+    odds.every(x=>Number.isFinite(Number(x))&&Number(x)>1) &&
+    probs.every(x=>Number.isFinite(Number(x))&&Number(x)>=0&&Number(x)<=1) &&
+    probs.reduce((a,b)=>a+b,0)>0;
+  if(!valid)return null;
+  const imp=odds.map(x=>1/Number(x));
+  const sum=imp.reduce((a,b)=>a+b,0);
+  return probs.map((p,i)=>({
+    p,implied:imp[i]/sum,edge:p-imp[i]/sum,
+    ev:p*odds[i]-1,odd:odds[i]
+  }));
 }
 function card(m){
  const c=calc(m), names=["1","X","2"],best=c.map((x,i)=>({...x,i})).sort((a,b)=>b.edge-a.edge)[0];
