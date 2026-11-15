@@ -17,21 +17,20 @@ return json(result, result.ok ? 200 : 502);
     api(`/predictions?fixture=${id}`,env,ctx,1800),
     api(`/odds?fixture=${id}`,env,ctx,1800)
    ]);
-   if(!pred.ok||!odds.ok)return json({error:"Nie udało się pobrać prognozy lub kursów"},502);
-   const pr=pred.data.response?.[0]?.predictions?.percent;
-   const probs=pr?[num(pr.home),num(pr.draw),num(pr.away)]:null;
-   const normalized=probs&&probs.every(x=>x!==null)?probs.map(x=>x/probs.reduce((a,b)=>a+b,0)):null;
-   const all=odds.data.response?.[0]?.bookmakers||[];
-   let found=null;
-   for(const book of all){
-    const market=book.bets?.find(b=>/match winner|1x2|winner/i.test(b.name));
-    if(!market)continue;
-    const vals=market.values||[];
-    const get=patterns=>{const v=vals.find(x=>patterns.some(p=>p.test(x.value)));return v?Number(v.odd):null};
-    const candidate=[get([/^home$/i,/^1$/]),get([/^draw$/i,/^x$/i,/^tie$/i]),get([/^away$/i,/^2$/i])];
-    if(candidate.every(x=>x&&x>1)){found=candidate;break}
-   }
-   return json({probabilities:normalized,odds:found,bookmakers:all.length,remaining:odds.remaining});
+   const pr=pred.ok?pred.data.response?.[0]?.predictions?.percent:null;
+const probs=pr?[num(pr.home),num(pr.draw),num(pr.away)]:null;
+const normalized=probs&&probs.every(x=>x!==null)&&probs.reduce((a,b)=>a+b,0)>0?probs.map(x=>x/probs.reduce((a,b)=>a+b,0)):null;
+const all=odds.ok?(odds.data.response?.[0]?.bookmakers||[]):[];
+let found=null;
+for(const book of all){
+ const market=book.bets?.find(b=>/match winner|1x2|winner/i.test(b.name));
+ if(!market)continue;
+ const vals=market.values||[];
+ const get=patterns=>{const v=vals.find(x=>patterns.some(p=>p.test(x.value)));return v?Number(v.odd):null};
+ const candidate=[get([/^home$/i,/^1$/]),get([/^draw$/i,/^x$/i,/^tie$/i]),get([/^away$/i,/^2$/i])];
+ if(candidate.every(x=>x&&x>1)){found=candidate;break}
+}
+return json({probabilities:normalized,odds:found,bookmakers:all.length,remaining:odds.ok?odds.remaining:null});
   }
   return env.ASSETS.fetch(request);
  },
