@@ -33,7 +33,7 @@ async function load(){
   const data=await r.json();remaining=data.remaining??null;
   const fixtures=(data.data?.response||[]).filter(x=>x.fixture?.status?.short==="NS").slice(0,20);
   const out=[];
-  for(const f of fixtures){
+  for(const f of fixtures.slice(0,2)){
    try{
     const a=await fetch(`/api/analysis?fixture=${f.fixture.id}`);
     let x={};if(a.ok)x=await a.json();
