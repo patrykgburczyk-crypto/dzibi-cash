@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b0d"><meta name="description" content="DziBi Cash – analiza meczów i Value Bets">
+<link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icon.svg">
+<title>DziBi Cash</title><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="logo">D<span>C</span></div><div><b>DziBi Cash</b><small>FOOTBALL ANALYZER</small></div></div>
+  <div class="status"><i id="statusDot"></i><span id="statusText">Tryb demonstracyjny</span></div>
+</header>
+<main>
+  <section class="hero">
+    <div><p class="eyebrow">INTELIGENTNA ANALIZA</p><h1>Nie zgaduj.<br><em>Znajduj przewagę.</em></h1>
+    <p class="muted">Automatyczna analiza piłki nożnej i wyszukiwanie Value Bets.</p></div>
+    <div class="heroMark">DC</div>
+  </section>
+  <section class="stats">
+    <article><span>MECZE</span><strong id="matchCount">0</strong><small>do analizy</small></article>
+    <article><span>VALUE BETS</span><strong class="green" id="valueCount">0</strong><small>przewaga ≥ 5 pp</small></article>
+    <article><span>LIMIT API</span><strong id="apiCount">—</strong><small>zapytania dzisiaj</small></article>
+  </section>
+  <section class="toolbar">
+    <div><h2>Dzisiejsze mecze</h2><p class="muted" id="updated">Oczekiwanie na dane</p></div>
+    <button id="refresh" class="primary">↻ Odśwież</button>
+  </section>
+  <div id="notice" class="notice">Aplikacja działa w trybie demonstracyjnym. Aby pobierać prawdziwe dane, wykonaj krótką konfigurację opisaną w instrukcji.</div>
+  <section id="matches" class="matches"></section>
+  <section class="panel">
+    <div class="toolbar"><div><h2>Historia typów</h2><p class="muted">Ostatnie 7 dni · zapisy lokalne</p></div><button id="clearHistory" class="ghost">Wyczyść</button></div>
+    <div id="history" class="history muted">Brak zapisanych typów.</div>
+  </section>
+  <section class="panel about">
+    <h2>Zasady DziBi Cash</h2>
+    <div class="rule"><b class="green">5 pp</b><span>Minimalna przewaga nad prawdopodobieństwem z kursu po normalizacji marży.</span></div>
+    <div class="rule"><b>EV</b><span>Dodatnie EV nie wystarcza. Value Bet wymaga jednocześnie przewagi minimum 5 pp.</span></div>
+    <div class="rule"><b>6</b><span>Maksymalnie sześć najlepszych rekomendacji dziennie.</span></div>
+  </section>
+</main>
+<footer>DziBi Cash · Wersja testowa 0.1 · To narzędzie analityczne, nie gwarancja wygranej.</footer>
+<script src="/app.js"></script>
+</body></html>
