@@ -36,7 +36,7 @@ async function load(){
   for(const f of fixtures){
    try{
     const a=await fetch(`/api/analysis?fixture=${f.fixture.id}`);
-    if(!a.ok)continue;const x=await a.json();if(!x.odds||!x.probabilities)continue;
+    let x={};if(a.ok)x=await a.json();
     out.push({id:String(f.fixture.id),league:f.league?.name,home:f.teams?.home?.name,away:f.teams?.away?.name,time:new Date(f.fixture.date).toLocaleTimeString("pl-PL",{hour:"2-digit",minute:"2-digit"}),odds:x.odds,p:x.probabilities});
    }catch(e){}
   }
