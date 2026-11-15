@@ -23,9 +23,18 @@ function calc(m){
   }));
 }
 function card(m){
- const c=calc(m), names=["1","X","2"],best=c.map((x,i)=>({...x,i})).sort((a,b)=>b.edge-a.edge)[0];
- const isValue=best.edge>=.05 && best.ev>0;
- return `<article class="match"><div class="league">${esc(m.league||"Piłka nożna")}</div><div class="teams"><div class="team">${esc(m.home)}</div><div class="vs">VS</div><div class="team">${esc(m.away)}</div></div><div class="kick">${esc(m.time||"Godzina nieznana")}</div><div class="odds">${c.map((x,i)=>`<div class="odd"><small>${names[i]}</small><b>${m.odds[i]?fmt(m.odds[i]):"—"}</b></div>`).join("")}</div><div class="metric"><span>Największa przewaga: <b>${names[best.i]}</b> · ${(best.edge*100).toFixed(1).replace(".",",")} pp</span><span class="tag ${isValue?"":"bad"}">${isValue?"VALUE BET":"POMIŃ"}</span></div><div class="metric"><span>EV: ${(best.ev*100).toFixed(1).replace(".",",")}%</span><button class="ghost" style="padding:6px 9px;font-size:10px" onclick="savePick('${m.id}','${names[best.i]}','${m.home.replace(/'/g,"")} – ${m.away.replace(/'/g,"")}')">Zapisz typ</button></div></article>`;
+  const c=calc(m), names=["1","X","2"];
+  if(!c)return `<article class="match">
+    <div class="league">${esc(m.league||"Piłka nożna")}</div>
+    <div class="teams"><div class="team">${esc(m.home)}</div>
+    <div class="vs">VS</div><div class="team">${esc(m.away)}</div></div>
+    <div class="kick">${esc(m.time||"Godzina nieznana")}</div>
+    <div class="empty">Brak kompletnych kursów lub prognozy. Brak wiarygodnej analizy — nie obstawiaj.</div>
+    <div class="odds">${(m.odds||[null,null,null]).map((x,i)=>`<div class="odd"><small>${names[i]}</small><b>${x?fmt(x):"—"}</b></div>`).join("")}</div>
+  </article>`;
+  const best=c.map((x,i)=>({...x,i})).sort((a,b)=>b.edge-a.edge)[0];
+  const isValue=best.edge>=.05&&best.ev>0;
+  return `<article class="match"><div class="league">${esc(m.league||"Piłka nożna")}</div><div class="teams"><div class="team">${esc(m.home)}</div><div class="vs">VS</div><div class="team">${esc(m.away)}</div></div><div class="kick">${esc(m.time||"Godzina nieznana")}</div><div class="odds">${c.map((x,i)=>`<div class="odd"><small>${names[i]}</small><b>${fmt(m.odds[i])}</b></div>`).join("")}</div><div class="metric"><span>Największa przewaga: <b>${names[best.i]}</b> · ${(best.edge*100).toFixed(1).replace(".",",")} pp</span><span class="tag ${isValue?"":"bad"}">${isValue?"VALUE BET":"POMIŃ"}</span></div><div class="metric"><span>EV: ${(best.ev*100).toFixed(1).replace(".",",")}%</span><button class="ghost" style="padding:6px 9px;font-size:10px" onclick="savePick('${m.id}','${names[best.i]}','${m.home.replace(/'/g,"")} – ${m.away.replace(/'/g,"")}')">Zapisz typ</button></div></article>`;
 }
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function render(){
