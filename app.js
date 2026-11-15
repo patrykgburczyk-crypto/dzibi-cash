@@ -31,7 +31,7 @@ async function load(){
   const r=await fetch(`/api/fixtures?date=${today()}`);
   if(!r.ok)throw new Error(r.status===503?"Brak klucza API na serwerze":"Błąd pobierania terminarza");
   const data=await r.json();remaining=data.remaining??null;
-  const fixtures=(data.response||[]).filter(x=>x.fixture?.status?.short==="NS").slice(0,8);
+  const fixtures=(data.response||[]).filter(x=>x.fixture?.status?.short==="NS").slice(0,20);
   const out=[];
   for(const f of fixtures){
    try{
