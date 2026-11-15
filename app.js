@@ -37,7 +37,7 @@ async function load(){
    try{
     const a=await fetch(`/api/analysis?fixture=${f.fixture.id}`);
     let x={};if(a.ok)x=await a.json();
-    out.push({id:String(f.fixture.id),league:f.league?.name,home:f.teams?.home?.name,away:f.teams?.away?.name,time:new Date(f.fixture.date).toLocaleTimeString("pl-PL",{hour:"2-digit",minute:"2-digit"}),odds:x.odds||[null,null,null],p:x.probabilities||[null,null,null]
+    out.push({id:String(f.fixture.id),league:f.league?.name,home:f.teams?.home?.name,away:f.teams?.away?.name,time:new Date(f.fixture.date).toLocaleTimeString("pl-PL",{hour:"2-digit",minute:"2-digit"}),odds:x.odds||[null,null,null],p:x.probabilities||[null,null,null]});
    }catch(e){}
   }
   matches=out;liveMode=true;$("#notice").textContent="Dane pobrane z API-Football. Analiza wykorzystuje dostępne prognozy i kursy 1X2. Brak danych nie jest zastępowany zgadywaniem.";
