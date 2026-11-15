@@ -7,7 +7,8 @@ export default {
   if(url.pathname==="/api/fixtures"){
    const date=url.searchParams.get("date")||new Date().toISOString().slice(0,10);
    if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return json({error:"Nieprawidłowa data"},400);
-   return api(`/fixtures?date=${date}&timezone=Europe%2FWarsaw`,env,ctx,900);
+   const result=await api(`/fixtures?date=${date}&timezone=Europe%2FWarsaw`,env,ctx,900);
+return json(result, result.ok ? 200 : 502);
   }
   if(url.pathname==="/api/analysis"){
    const id=url.searchParams.get("fixture");
